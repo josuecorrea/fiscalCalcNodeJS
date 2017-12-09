@@ -12,5 +12,7 @@ var parser = new xml2js.Parser(
 );
 
 exports.newdocument = function(req, res, next){
-    console.log(req);     
+    console.log(req.file);
+
+    res.send('Documento recebido!')
 }

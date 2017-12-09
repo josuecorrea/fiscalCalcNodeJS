@@ -5,7 +5,18 @@ var accountController = require('../controllers/accountController');
 var documentController = require('../controllers/documentController');
 var auth = require('../security/auth');
 
-var upload  = multer({ storage: multer.memoryStorage() });
+//var upload  = multer({ storage: multer.memoryStorage() });
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, '/tmp/my-uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
+})
+
+var upload = multer({ storage: storage })
 
 var router = express.Router();
 
@@ -20,12 +31,7 @@ router.delete('/users/:id', auth.isAdmin, userController.remove);
 router.post('/login', accountController.authenticate);
 
 //document routes
-//router.post('/newdocument', documentController.newdocument);
-router.post('/newdocument', upload.single('somefile'), (req, res) => {  
-    console.log(req.body);
-    console.log(req.file);
-    res.send();
-  });
+router.post('/newdocument', upload.single('somefile'), documentController.newdocument);
 
 
 module.exports = router;
