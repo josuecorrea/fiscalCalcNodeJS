@@ -2,6 +2,7 @@ var fs = require('fs'),
 xml2js = require('xml2js');
 var co = require('co');
 var repository = require('../repository/mongorepository');
+var config = require('../config/config')
 
 var parser = new xml2js.Parser(
     {
@@ -14,17 +15,15 @@ var parser = new xml2js.Parser(
 exports.newdocument = function(req, res, next){
     console.log("Arquivo recebido: " + req.file.originalname);
 
-    var diretorio = "/tmp/my-uploads/";
-
-    fs.readFile(diretorio + req.file.originalname, function(err, data) {
+    fs.readFile(config.diretorioUpload + req.file.originalname, function(err, data) {
         parser.parseString(data, function (err, result) {
-          repository.inserir(result.nfeProc.NFe.infNFe, function(err, callback){
+          repository.inserir(result.nfeProc.NFe.infNFe, 'documents', function(err, callback){
               if(err){
-                res.send('Deu erro!')
+                res.status(500).json({status:"Deu alguma coisa errada!"})
               }
           });           
         });
     });
 
-    res.send('Documento recebido!')
+    res.status(200).json({status:"Documento recebido!"})
 }

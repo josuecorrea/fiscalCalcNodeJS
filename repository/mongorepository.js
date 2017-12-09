@@ -1,11 +1,12 @@
 var MongoClient = require('mongodb').MongoClient;
 var co = require('co');
 var assert = require('assert');
+var config = require('../config/config')
 
- var inserir = function(data, callback){
+ var inserir = function(data, collection, callback){
     co(function*() {
-        var db = yield MongoClient.connect('mongodb://localhost:27017/calcfiscal');
-        var r = yield db.collection('documents').insertOne(data);
+        var db = yield MongoClient.connect(config.connectionString);
+        var r = yield db.collection(collection).insertOne(data);
         assert.equal(1, r.insertedCount);           
         db.close();
 
