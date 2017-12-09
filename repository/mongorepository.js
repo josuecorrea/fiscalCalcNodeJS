@@ -12,8 +12,7 @@ var assert = require('assert');
     }).catch(function(err) {
              console.log(err.stack);
     });    
- }; 
- 
+ };  
 
   module.exports = {
       inserir : inserir

@@ -12,7 +12,19 @@ var parser = new xml2js.Parser(
 );
 
 exports.newdocument = function(req, res, next){
-    console.log(req.file);
+    console.log("Arquivo recebido: " + req.file.originalname);
+
+    var diretorio = "/tmp/my-uploads/";
+
+    fs.readFile(diretorio + req.file.originalname, function(err, data) {
+        parser.parseString(data, function (err, result) {
+          repository.inserir(result.nfeProc.NFe.infNFe, function(err, callback){
+              if(err){
+                res.send('Deu erro!')
+              }
+          });           
+        });
+    });
 
     res.send('Documento recebido!')
 }
