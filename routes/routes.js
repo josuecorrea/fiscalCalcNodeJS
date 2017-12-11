@@ -32,5 +32,6 @@ router.post('/login', accountController.authenticate);
 
 //document routes
 router.post('/newdocument', upload.single('somefile'), documentController.newdocument);
+router.get('/alldocs', documentController.alldocs);
 
 module.exports = router;

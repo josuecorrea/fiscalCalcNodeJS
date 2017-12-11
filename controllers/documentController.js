@@ -27,3 +27,16 @@ exports.newdocument = function(req, res, next){
 
     res.status(200).json({status:"Documento recebido!"})
 }
+
+exports.alldocs = function(req, res, next){
+     
+    repository.alldocs('documents', function(err, callback){
+        if(err){
+          res.status(500).json({status:"Deu alguma coisa errada!"})
+        }
+
+        res.status(200).json(docs);        
+
+    });  
+
+}
